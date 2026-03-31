@@ -125,9 +125,10 @@ public class OrderService {
 
             for (OrderItem item : items) {
                 MenuItem menuItem = MenuItemService.getInstance().getMenuItemById(item.getItemId());
-                if (menuItem.getItemType() == ItemType.DRINK){
+                if (menuItem != null && menuItem.getItemType() == ItemType.DRINK){
                     MenuItemService.getInstance().editMenuItem(menuItem.getItemId(), menuItem.getProductName(), menuItem.getItemType(), menuItem.getPrice(), menuItem.getStock() - item.getQuantity(), menuItem.isAvailable());
                 }
+                orderItemDAO.updateItemStatus(item.getOrderItemId(), OrderItemStatus.SERVED);
             }
 
             orderDAO.updateOrderCheckOut(orderId, OrderStatus.PAID, total);
@@ -135,6 +136,9 @@ public class OrderService {
             tableDAO.updateTable(order.getTableId(),
                     tableDAO.findTableById(order.getTableId()).getCapacity(),
                     TableStatus.EMPTY);
+
+            TableService.getInstance().refreshTables();
+            MenuItemService.getInstance().refreshMenuItems();
 
             System.out.printf("Thanh toán thành công! Tổng tiền: %,.0f VND%n", total);
         } catch (SQLException e) {

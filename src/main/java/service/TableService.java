@@ -85,7 +85,7 @@ public class TableService {
 
     public Table getTableById(int tableId) {
         try {
-            return new TableDAO().findTableById(tableId);
+            return tableDAO.findTableById(tableId);
         } catch (SQLException e) {
             System.out.println("Database error: " + e.getMessage());
             return null;

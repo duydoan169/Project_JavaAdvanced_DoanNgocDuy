@@ -85,4 +85,30 @@ public class OrderItemDAO {
         }
         return items;
     }
+
+    public OrderItem findOrderItemByItemId(int orderItemId) throws SQLException {
+        String sql = "select oi.*, mi.product_name from order_items oi " +
+                "join menu_items mi on oi.item_id = mi.item_id " +
+                "where oi.order_item_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, orderItemId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    OrderItem item = new OrderItem(
+                            rs.getInt("order_item_id"),
+                            rs.getInt("order_id"),
+                            rs.getInt("item_id"),
+                            rs.getInt("quantity"),
+                            rs.getDouble("unit_price"),
+                            OrderItemStatus.valueOf(rs.getString("status")),
+                            rs.getTimestamp("created_at").toLocalDateTime()
+                    );
+                    item.setItemName(rs.getString("product_name"));
+                    return item;
+                }
+            }
+        }
+        return null;
+    }
 }

@@ -3,6 +3,7 @@ package presentation;
 import model.OrderItem;
 import model.OrderItemStatus;
 import service.ChefService;
+import service.OrderService;
 import utils.InputUtils;
 
 import java.util.List;
@@ -63,16 +64,25 @@ public class ChefPresentation {
             }
         }
 
+        OrderItem targetItem = ChefService.getInstance().findOrderItemByItemId(targetId);
+        if (targetItem == null){
+            System.out.println("Món không tồn tại");
+            return;
+        }
+
         System.out.println("1. PENDING  → COOKING");
         System.out.println("2. COOKING  → READY");
         System.out.println("3. READY    → SERVED");
         System.out.println("0. Quay lại");
 
         switch (InputUtils.readLine("Chọn trạng thái mới: ")) {
-            case "1" -> chefService.updateItemStatus(targetId, OrderItemStatus.COOKING);
-            case "2" -> chefService.updateItemStatus(targetId, OrderItemStatus.READY);
-            case "3" -> chefService.updateItemStatus(targetId, OrderItemStatus.SERVED);
-            case "0" -> { return; }
+            case "1" -> chefService.editItemStatus(targetId, OrderItemStatus.COOKING);
+            case "2" -> chefService.editItemStatus(targetId, OrderItemStatus.READY);
+            case "3" -> chefService.editItemStatus(targetId, OrderItemStatus.SERVED);
+            case "0" -> {
+                System.out.println("Đã thoát sửa trạng thái");
+                return;
+            }
             default  -> System.out.println("Lựa chọn không hợp lệ");
         }
     }

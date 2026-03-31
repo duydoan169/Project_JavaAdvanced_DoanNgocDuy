@@ -144,7 +144,7 @@ public class ManagerPresentation {
         System.out.println("================================DISH INFO================================");
         System.out.printf("%-5s %-20s %-6s %-12s %-6s %s%n",
                 "ID", "Tên món", "Loại", "Giá", "Tồn", "Trạng thái");
-        System.out.println("----------------------------------------");
+        System.out.println("-------------------------------------------------------------------------");
         System.out.printf("%-5d %-20s %-6s %-12.0f %-6s %s%n",
                 targetItem.getItemId(),
                 targetItem.getProductName(),
@@ -237,7 +237,7 @@ public class ManagerPresentation {
         System.out.println("================================DISH INFO================================");
         System.out.printf("%-5s %-20s %-6s %-12s %-6s %s%n",
                 "ID", "Tên món", "Loại", "Giá", "Tồn", "Trạng thái");
-        System.out.println("----------------------------------------");
+        System.out.println("-------------------------------------------------------------------------");
         System.out.printf("%-5d %-20s %-6s %-12.0f %-6s %s%n",
                 targetItem.getItemId(),
                 targetItem.getProductName(),
@@ -449,27 +449,29 @@ public class ManagerPresentation {
     private static void banUser(){
         showUserList();
 
-        try {
-            int target = Integer.parseInt(InputUtils.readLine("Nhập ID người dùng: "));
-            User targetUser = UserService.getInstance().getUserById(target);
+        while (true){
+            try {
+                int target = Integer.parseInt(InputUtils.readLine("Nhập ID người dùng: "));
+                User targetUser = UserService.getInstance().getUserById(target);
 
-            if (targetUser == null){
-                return;
-            }
-
-            if (targetUser.isActive()){
-                UserService.getInstance().banUser(target);
-            }else {
-                if(InputUtils.readLine("Người dùng này đang bị ban, unban người dùng? (y/n): ").equalsIgnoreCase("y")){
-                    UserService.getInstance().unbanUser(target);
-                    return;
-                }else {
-                    System.out.println("Đã hủy unban người dùng");
+                if (targetUser == null){
                     return;
                 }
+
+                if (targetUser.isActive()){
+                    UserService.getInstance().banUser(target);
+                }else {
+                    if(InputUtils.readLine("Người dùng này đang bị ban, unban người dùng? (y/n): ").equalsIgnoreCase("y")){
+                        UserService.getInstance().unbanUser(target);
+                        return;
+                    }else {
+                        System.out.println("Đã hủy unban người dùng");
+                        return;
+                    }
+                }
+            }catch (NumberFormatException e){
+                System.out.println("ID Phải là số");
             }
-        }catch (NumberFormatException e){
-            System.out.println("ID Phải là số");
         }
     }
 }
