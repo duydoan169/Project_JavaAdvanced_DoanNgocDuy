@@ -56,18 +56,6 @@ CREATE TABLE IF NOT EXISTS order_items (
     FOREIGN KEY (item_id)  REFERENCES menu_items(item_id)
 );
 
--- create reviews table
-CREATE TABLE IF NOT EXISTS reviews (
-    review_id   INT      PRIMARY KEY AUTO_INCREMENT,
-    customer_id INT      NOT NULL,
-    item_id     INT               DEFAULT NULL, -- NULL = review for restaurant overall
-    star_rating INT      NOT NULL,              -- 1 to 5
-    comment     TEXT              DEFAULT NULL,
-    created_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (customer_id) REFERENCES users(user_id),
-    FOREIGN KEY (item_id)     REFERENCES menu_items(item_id)
-);
-
 -- insert users
 INSERT IGNORE INTO users (username, password, role) VALUES
 ('chef_rudy',     '$2a$10$zuXrBU1xRS9ez4TD.wsNION7F288OAB/aZ6a8Uk7BdtUwmGhGR3KS', 'CHEF'),
@@ -129,10 +117,3 @@ INSERT IGNORE INTO order_items (order_id, item_id, quantity, unit_price, status)
 (6, 3,  2, 35000.00,  'READY'),
 (6, 9,  2, 20000.00,  'COOKING'),
 (6, 5,  1, 30000.00,  'PENDING');
-
--- insert sample reviews
-INSERT IGNORE INTO reviews (customer_id, item_id, star_rating, comment) VALUES
-(4, 1,    5, 'Amazing fried rice, will order again!'),
-(4, NULL, 4, 'Great service and atmosphere.'),
-(5, 2,    5, 'Best grilled chicken in town.'),
-(6, 4,    3, 'Pho was okay, could be hotter.');
