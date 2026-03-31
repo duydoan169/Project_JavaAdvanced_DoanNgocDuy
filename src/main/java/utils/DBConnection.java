@@ -11,6 +11,8 @@ public class DBConnection {
 
     private static Connection connection = null;
 
+    private DBConnection() {}
+
     public static Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {
             connection = DriverManager.getConnection(URL, USER, PASSWORD);
