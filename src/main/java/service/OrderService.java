@@ -51,7 +51,7 @@ public class OrderService {
             orderDAO.createOrder(tableId, customerId, items);
 
             tableDAO.updateTable(tableId, table.getCapacity(), TableStatus.OCCUPIED);
-
+            TableService.getInstance().refreshTables();
             System.out.println("Đặt món thành công");
         } catch (SQLException e) {
             System.out.println("Database error: " + e.getMessage());
